@@ -1,0 +1,41 @@
+# Compiled CUDA kernels
+*.so
+*.o
+kernels.so
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+build/
+dist/
+*.egg-info/
+
+# Data files
+data/
+*.npy
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build artifacts
+*.pt
+*.pth
+
+# Commit helper files (local only, not pushed)
+commit_schedule.md
+COMMIT_GUIDE.md
+staggered_commit.sh
