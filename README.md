@@ -4,6 +4,10 @@ High-performance CUDA implementations of cross-attention with progressive optimi
 
 The project originated from optimizing the Perceiver architecture, where cross-attention between latent queries and input keys/values was identified as the primary performance bottleneck. Rather than optimizing the entire Perceiver pipeline, we focused on developing highly optimized CUDA kernels for the cross-attention operation itself. While the kernels are general-purpose and can be used in any cross-attention context, they are particularly well-suited for Perceiver-style architectures where latent vectors attend to large input sequences.
 
+## Relation to FlashAttention
+
+FlashAttention optimizes symmetric self-attention where Q, K, V have the same sequence length, tiling both Q and K to fit in shared memory. Our kernels are specifically designed for Perceiver-style cross-attention where Q (latents) is much smaller than K/V (inputs). Since Q is small (e.g., 512 latents × 768 dims), each warp can load its entire Q vector into registers and keep it there throughout computation. K and V are large (e.g., 784 tokens × 768 dims), so we tile K into shared memory in chunks, allowing multiple warps to reuse the same tile. V is accessed once per token during output accumulation, so we load it directly from global memory with float4 vectorization for efficiency. This specialized approach exploits the asymmetry that FlashAttention doesn't assume.
+
 ## Features
 
 - **4 Progressive Kernel Implementations**:
